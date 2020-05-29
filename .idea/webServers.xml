@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="20c531b2-b521-4eb4-8fa0-5133a0fccd4f" name="88.71_8822" url="http://192.168.88.71">
+        <fileTransfer host="192.168.88.71" port="22" rootFolder="/opt/pyscript" accessType="SFTP" password="df9bdf98df99df9edf9fdf9c" username="root">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
