@@ -9,6 +9,8 @@ import re
 import os
 import time
 import ssl
+import requests
+
 
 i = 0
 def getHtml(url):
@@ -34,9 +36,9 @@ def callBackFunc(block_Num,block_Size,total_Size):
     print("正在下载第",i,"张图片，已下载 %",download_Percent)
 
 if __name__ == '__main__':
-    gate_URL = "https://www.7797mk.com/pic/5/"
+    gate_URL = "https://www.3039mk.com/pic/5/"
     html = getHtml(gate_URL)
-    # print(html)
+    print(html)
     html_Doc = html.read()
     buff = BytesIO(html_Doc)
     f = gzip.GzipFile(fileobj=buff)
@@ -45,14 +47,23 @@ if __name__ == '__main__':
 
     if html != None:
         soupHtml = BeautifulSoup(html_Doc, "lxml", from_encoding="utf-8")
+        # print(soupHtml.prettify())
         divs = soupHtml.findAll('a', target="_blank")
         print(divs)
+        # for i in divs:
+        #     print(i)
         flag = 1
         for div in divs:
+            img_uri = div.get("href")
+            print(img_uri)
+            soup = getHtml("https://www.3039mk.com"+img_uri)
+            # print(soup)
             div_Doc = str(div)
-            soupDiv = BeautifulSoup(div_Doc, "lxml", from_encoding="utf-8")
+            soupDiv = BeautifulSoup(soup, "lxml", from_encoding="utf-8")
+            # print(type(soupDiv))
             if soupDiv.find('img') != None:
                 tag_img = soupDiv.find('img')
+                print(tag_img)
                 filename = "Background"+str(time.time())
                 tag_a = soupDiv.find('a')
                 img_direction_url = tag_a['href']
@@ -61,12 +72,15 @@ if __name__ == '__main__':
                 print(filename)
                 print("开始下载资源。。。")
                 img_Html = getHtml(img_direction_url)
+                print(img_Html)
                 img_Doc = img_Html.read()
+                print(img_Doc)
                 while True:
                     i = i + 1
                     soup_Img_Doc = BeautifulSoup(img_Doc, "lxml", from_encoding="gb18030")
                     download_btn = soup_Img_Doc.find('a', class_="down-btn")
                     img_url = download_btn['href']
+                    print(img_url)
                     print("需要下载的图片URL",img_url)
                     _path_ = os.path.abspath(filename)
                     path = os.path.join(_path_, img_url[-6:])
@@ -75,7 +89,7 @@ if __name__ == '__main__':
                         break
                     else:
                         img_Tag_a = soup_Img_Doc.find('a', href=re.compile(r"\d_?.html"))
-                        img_direction_url = "http://www.7797mk.com"+img_Tag_a['href']
+                        img_direction_url = "https://www.3039mk.com/pic/5"+img_Tag_a['href']
                         img_Html = getHtml(img_direction_url)
                         img_Doc = img_Html.read()
                 i = 0
