@@ -51,12 +51,13 @@ def downloadImg(img_urls):
         with open(os.path.join(BASE_DIR,dir_name)+"/"+filename, "wb") as f:
             f.write(r.content)
 
-def mul_threads(func_test,img_urls):
+def mul_threads(func_test,arg1):
     #记录实验开始时间
     t1 = time.time()
     th_lst = []
-    th = threading.Thread(target=func_test, args=[img_urls])
-    th_lst.append(th)
+    for i in range(20):
+        th = threading.Thread(target=func_test, args=[arg1])
+        th_lst.append(th)
     print(th_lst)
     for th in th_lst:
         print("一个线程启动")
@@ -71,7 +72,7 @@ def mul_threads(func_test,img_urls):
 
 
 if __name__ == '__main__':
-    url = "https://www.3039mk.com/pic/1"
+    url = "https://www.8848mk.com/pic/7"
     html = getHtml(url)
     # print(html)
 
@@ -86,26 +87,27 @@ if __name__ == '__main__':
     th_list = []
     for i in soup_a:
         # print(i.get("href"))
-        regex = re.search('/pic/1/(.*?).html',i.get("href"))
+        regex = re.search('/pic/[1-7]/(.*?).html',i.get("href"))
         if regex:
             # print(i.get("href"))
             uri = i.get("href")
-            goal_url = "https://www.3039mk.com" + uri
-            print(goal_url)
+            goal_url = "https://www.8848mk.com" + uri
+            # print(goal_url)
             img_urls = getImg(goal_url)
-            th = threading.Thread(target=downloadImg, args=[img_urls])
-            th_list.append(th)
-    print(th_list)
-    for t in th_list:
-        print("一个页面的线程")
-        t.start()
-    for t in th_list:
-        print("线程阻塞")
-        t.join()
-
-            # img_url = "https://www.3039mk.com/pic/5/2019-12-01/25460.html"
-            # img_urls = getImg(goal_url)
-            # downloadImg(img_urls)
+            # print(img_urls)
+            th_list = th_list + img_urls
+    # print(th_list)
+    # print(len(th_list))
+    mul_threads(downloadImg, th_list)
+    #         th = threading.Thread(target=downloadImg, args=[img_urls])
+    #         th_list.append(th)
+    # print(th_list)
+    # for t in th_list:
+    #     print("一个页面的线程")
+    #     t.start()
+    # for t in th_list:
+    #     print("线程阻塞")
+    #     t.join()
 
 # if __name__ == '__main__':
 #     img_url = "https://www.3039mk.com/pic/5/2019-12-01/25460.html"
