@@ -8,6 +8,7 @@ import re
 import os
 import time
 import threading
+import sys
 
 #当前文件所在目录
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -24,6 +25,27 @@ def getHtml(url):
     html = r.text
     # print(html)
     return html
+
+#传入上级url，获取上级页面内所有内容url,返url列表
+def get_3_url(upper_url):
+    goal_url_list = []
+    html = getHtml(upper_url)
+    soup = BeautifulSoup(html, "lxml")
+    soup_a = soup.find_all('a', {'target': "_blank"})
+    for i in soup_a:
+        # print(i.get("href"))
+        regex = re.search('/pic/[1-7]/(.*?).html',i.get("href"))
+        if regex:
+            # print(i.get("href"))
+            uri = i.get("href")
+            goal_url = "https://www.8848mk.com" + uri
+            print(goal_url)
+            goal_url_list.append(goal_url)
+    print(goal_url_list)
+    return goal_url_list
+
+
+
 
 #传入图片面img_url,解析出页面所有图片地址，返回地址列表img_urls
 def  getImg(img_url):
@@ -55,16 +77,16 @@ def mul_threads(func_test,arg1):
     #记录实验开始时间
     t1 = time.time()
     th_lst = []
-    for i in range(20):
+    for i in range(10):
         th = threading.Thread(target=func_test, args=[arg1])
         th_lst.append(th)
     print(th_lst)
     for th in th_lst:
-        print("一个线程启动")
+        # print("一个线程启动")
         th.start()
-    for th in th_lst:
-        print("等待线程结束，阻塞")
-        th.join()
+    # for th in th_lst:
+    #     # print("等待线程结束，阻塞")
+    #     th.join()
     t2 = time.time()
     t = t2-t1
     print("使用时间：%f" % t)
@@ -72,10 +94,26 @@ def mul_threads(func_test,arg1):
 
 
 if __name__ == '__main__':
-    url = "https://www.8848mk.com/pic/7/index.html"
+    _url = "https://www.8848mk.com"
+    num = 2
+    while num <= 20:
+        _2_url = "https://www.8848mk.com/pic/7/index_" + str(num) + ".html"
+        print(_2_url)
+        # url = "https://www.8848mk.com/pic/7/index_2.html"
+        goal_urls = get_3_url(_2_url)
+        if goal_urls:
+            for g_url in goal_urls:
+                img_url_list = getImg(g_url)
+                print(img_url_list)
+                mul_threads(downloadImg, img_url_list)
+        else:
+            print("没有这个二级页面！")
+            sys.exit(1)
+        num += 1
+    '''
     html = getHtml(url)
     # print(html)
-    # '''
+
     soup = BeautifulSoup(html,"lxml")
     # print(type(soup))
     # print(soup)
@@ -108,7 +146,7 @@ if __name__ == '__main__':
     # for t in th_list:
     #     print("线程阻塞")
     #     t.join()
-    # '''
+    '''
     # i=2
     # nextHtmlUrl  = url + "index_" + str(i) + ".html"
     # print(nextHtmlUrl)
