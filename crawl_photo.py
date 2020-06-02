@@ -36,7 +36,7 @@ def  getImg(img_url):
     # print(img_list)
     for i in img_list:
         img_urls.append(i.get("src"))
-    print(img_urls)
+    # print(img_urls)
     return img_urls
 
 #根据图片地址列表下载图片到目录IMG中，图片名保持原图片名
@@ -72,10 +72,10 @@ def mul_threads(func_test,arg1):
 
 
 if __name__ == '__main__':
-    url = "https://www.8848mk.com/pic/7"
+    url = "https://www.8848mk.com/pic/7/index.html"
     html = getHtml(url)
     # print(html)
-
+    # '''
     soup = BeautifulSoup(html,"lxml")
     # print(type(soup))
     # print(soup)
@@ -92,13 +92,13 @@ if __name__ == '__main__':
             # print(i.get("href"))
             uri = i.get("href")
             goal_url = "https://www.8848mk.com" + uri
-            # print(goal_url)
+            print(goal_url)
             img_urls = getImg(goal_url)
             # print(img_urls)
             th_list = th_list + img_urls
     # print(th_list)
     # print(len(th_list))
-    mul_threads(downloadImg, th_list)
+    # mul_threads(downloadImg, th_list)
     #         th = threading.Thread(target=downloadImg, args=[img_urls])
     #         th_list.append(th)
     # print(th_list)
@@ -108,6 +108,10 @@ if __name__ == '__main__':
     # for t in th_list:
     #     print("线程阻塞")
     #     t.join()
+    # '''
+    # i=2
+    # nextHtmlUrl  = url + "index_" + str(i) + ".html"
+    # print(nextHtmlUrl)
 
 # if __name__ == '__main__':
 #     img_url = "https://www.3039mk.com/pic/5/2019-12-01/25460.html"
