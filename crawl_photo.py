@@ -14,15 +14,18 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-
+#传入url,以字符串形式返回页面内容
 def getHtml(url):
+    #r的类型为class 'requests.models.Response'
     r = requests.get(url)
     r.encoding  = 'utf-8'
     # print(type(r))
     # print(type(r.text))
     # buff = BytesIO(r.text)
     # f = gzip.GzipFile(fileobj=buff)
+    #html为str类型
     html = r.text
+    # print(type(html))
     # print(html)
     return html
 
@@ -94,10 +97,11 @@ def mul_threads(func_test,arg1):
 
 
 if __name__ == '__main__':
+    # '''
     _url = "https://www.8848mk.com"
     num = 2
-    while num <= 20:
-        _2_url = "https://www.8848mk.com/pic/7/index_" + str(num) + ".html"
+    while num <= 7:
+        _2_url = "https://www.8848mk.com/pic/5/index_" + str(num) + ".html"
         print(_2_url)
         # url = "https://www.8848mk.com/pic/7/index_2.html"
         goal_urls = get_3_url(_2_url)
@@ -110,49 +114,4 @@ if __name__ == '__main__':
             print("没有这个二级页面！")
             sys.exit(1)
         num += 1
-    '''
-    html = getHtml(url)
-    # print(html)
-
-    soup = BeautifulSoup(html,"lxml")
-    # print(type(soup))
-    # print(soup)
-    soup_a = soup.find_all('a',{'target':"_blank"})
-    # soup_a = soup.find_all('li')
-    # print(soup.find_all(text=regex))
-    # print(type(soup_a))
-    # print(soup_a)
-    th_list = []
-    for i in soup_a:
-        # print(i.get("href"))
-        regex = re.search('/pic/[1-7]/(.*?).html',i.get("href"))
-        if regex:
-            # print(i.get("href"))
-            uri = i.get("href")
-            goal_url = "https://www.8848mk.com" + uri
-            print(goal_url)
-            img_urls = getImg(goal_url)
-            # print(img_urls)
-            th_list = th_list + img_urls
-    # print(th_list)
-    # print(len(th_list))
-    # mul_threads(downloadImg, th_list)
-    #         th = threading.Thread(target=downloadImg, args=[img_urls])
-    #         th_list.append(th)
-    # print(th_list)
-    # for t in th_list:
-    #     print("一个页面的线程")
-    #     t.start()
-    # for t in th_list:
-    #     print("线程阻塞")
-    #     t.join()
-    '''
-    # i=2
-    # nextHtmlUrl  = url + "index_" + str(i) + ".html"
-    # print(nextHtmlUrl)
-
-# if __name__ == '__main__':
-#     img_url = "https://www.3039mk.com/pic/5/2019-12-01/25460.html"
-#     img_urls = getImg(img_url)
-#     # downloadImg(img_urls)
-#     mul_threads(downloadImg,img_urls)
+    # '''
